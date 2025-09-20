@@ -47,7 +47,7 @@ struct DataBlock {
 
   DataBlock& operator=(DataBlock&& other) noexcept {
     if (this != &other) {
-      cudaFree(data_);
+      if (data_) cudaFree(data_);
       size_ = other.size_;
       data_ = other.data_;
       other.data_ = nullptr;

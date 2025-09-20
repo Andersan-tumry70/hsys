@@ -26,12 +26,9 @@ class VAddTest : public ::testing::TestWithParam<std::pair<std::size_t, float>> 
     b.block().copy_from_host(b_target.data());
 
     auto c = a + b;
-    auto c_from_device = Eigen::VectorXf(size);
 
-    cudaMemcpy(c_from_device.data(),
-        c.block().data(),
-        size * sizeof(float),
-        cudaMemcpyDeviceToHost);
+    Eigen::VectorXf c_from_device = Eigen::VectorXf(size);
+    c.block().copy_to_host(c_from_device.data());
 
     return c_target.isApprox(c_from_device, tol);
   }

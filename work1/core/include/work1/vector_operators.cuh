@@ -16,7 +16,7 @@ Vector<AtomT> operator+(const Vector<AtomT>& lhs, const Vector<AtomT>& rhs) {
 
   Vector<AtomT> result(result_size);
 
-  kernel_vector_add<<<128, cudagh::cover(result_size, 128)>>>(
+  kernel_vector_add<<<cudagh::cover(result_size, 128), 128>>>(
       lhs.accessor(), rhs.accessor(), result.accessor());
 
   // NOTE: ignore Vector::~Vector() (RVO)
