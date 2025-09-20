@@ -17,5 +17,5 @@ cmake --build build/ -j8
 ## Tests
 
 ```
-ctest --test-dir build/work1/tests/
+ctest --progress --test-dir build/work1/tests/ -R 'VectorTest|VectorAddTest'
 ```

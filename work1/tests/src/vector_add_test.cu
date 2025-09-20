@@ -8,7 +8,7 @@
 #include <cuda_runtime_api.h>
 #include <gtest/gtest.h>
 
-class VAddTest : public ::testing::TestWithParam<std::pair<std::size_t, float>> {
+class VectorAddTest : public ::testing::TestWithParam<std::pair<std::size_t, float>> {
  protected:
   bool vadd_test_impl(std::size_t size, float tol) {
     Eigen::VectorXf a_target = Eigen::VectorXf::Random(
@@ -27,6 +27,8 @@ class VAddTest : public ::testing::TestWithParam<std::pair<std::size_t, float>> 
 
     auto c = a + b;
 
+    if (c.size() != size) return false;
+
     Eigen::VectorXf c_from_device = Eigen::VectorXf(size);
     c.block().copy_to_host(c_from_device.data());
 
@@ -34,15 +36,15 @@ class VAddTest : public ::testing::TestWithParam<std::pair<std::size_t, float>> 
   }
 };
 
-TEST_P(VAddTest, vadd_test) {  // It's Ok, dumb clangd!
+TEST_P(VectorAddTest, vadd_test) {  // It's Ok, dumb clangd!
   auto [size, tol] = GetParam();
   EXPECT_TRUE(vadd_test_impl(size, tol));
 }
 
 // clang-format off
 INSTANTIATE_TEST_SUITE_P(
-    VAddTests,
-    VAddTest,
+    VectorAddTestSuite,
+    VectorAddTest,
     ::testing::Values(
         std::make_pair(1, 1e-6),
         std::make_pair(2, 1e-6),

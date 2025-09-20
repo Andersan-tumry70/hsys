@@ -7,7 +7,7 @@ namespace hsys {
 
 template <AtomKind AtomT>
 __global__ void kernel_vector_add(
-    VectorAccessor<AtomT> a, VectorAccessor<AtomT> b, VectorAccessor<AtomT> c) {
+    VectorAccessor<AtomT> c, VectorAccessor<AtomT> a, VectorAccessor<AtomT> b) {
   std::size_t i = blockIdx.x * blockDim.x + threadIdx.x;
   if (i < a.size()) c[i] = a[i] + b[i];
 }

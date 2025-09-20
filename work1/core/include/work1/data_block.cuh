@@ -25,8 +25,8 @@ struct DataBlock {
   DataBlock(const DataBlock& other)
       : size_(other.size_)
       , data_(nullptr) {
-    cudaMalloc(&data_, other.size_ * sizeof(AtomT));
-    cudaMemcpy(data_, other.data_, other.size_ * sizeof(AtomT), cudaMemcpyDeviceToDevice);
+    cudaMalloc(&data_, size_ * sizeof(AtomT));
+    cudaMemcpy(data_, other.data_, size_ * sizeof(AtomT), cudaMemcpyDeviceToDevice);
   }
 
   DataBlock(DataBlock&& other) noexcept
@@ -37,7 +37,7 @@ struct DataBlock {
 
   DataBlock& operator=(const DataBlock& other) {
     if (this != &other) {
-      cudaFree(data_);
+      if (data_) cudaFree(data_);
       size_ = other.size_;
       cudaMalloc(&data_, size_ * sizeof(AtomT));
       cudaMemcpy(data_, other.data_, size_ * sizeof(AtomT), cudaMemcpyDeviceToDevice);
@@ -75,7 +75,7 @@ struct DataBlock {
     cudaMemcpy(data_, host_ptr, size_ * sizeof(AtomT), cudaMemcpyHostToDevice);
   }
 
-  ~DataBlock() {
+  ~DataBlock() noexcept {
     if (data_) cudaFree(data_);
   }
 };

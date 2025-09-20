@@ -21,11 +21,11 @@ struct Vector {
     return block_.size();
   }
 
-  DataBlock<AtomT> block() {
+  DataBlock<AtomT>& block() {
     return block_;
   }
 
-  const DataBlock<AtomT> block() const {
+  const DataBlock<AtomT>& block() const {
     return block_;
   }
 
