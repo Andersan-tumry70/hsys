@@ -16,3 +16,4 @@ CompileFlags:
     - -rdc=*
     - -Wno-deprecated-gpu-targets
     - --expt-relaxed-constexpr
+    - -fdeps-format=*

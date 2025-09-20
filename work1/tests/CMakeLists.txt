@@ -1,10 +1,8 @@
 cmake_minimum_required(VERSION 3.31)
-project(work1_tests LANGUAGES CXX CUDA)
+project(work1_tests LANGUAGES CUDA)
 
 include(../../cmake/deps/gtest.cmake)
 include(../../cmake/deps/eigen.cmake)
-
-find_package(CUDAToolkit REQUIRED)
 
 file(GLOB_RECURSE SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cu
@@ -14,7 +12,6 @@ add_executable(work1_tests ${SRC})
 
 target_compile_features(work1_tests PRIVATE
     cuda_std_20
-    cxx_std_20
 )
 
 target_compile_options(work1_tests PRIVATE
@@ -28,7 +25,6 @@ target_compile_options(work1_tests PRIVATE
 target_link_libraries(work1_tests PRIVATE
     GTest::gtest_main
     Eigen3::Eigen
-    CUDA::cudart
     work1::core
 )
 

@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 #include <work1/vector.cuh>
 
-namespace hsys {
-namespace {
+/* AI generated code: begin */
+
+using namespace hsys;
 
 TEST(VectorTest, ConstructorAndSize) {
   const std::size_t test_size = 100;
@@ -102,5 +103,4 @@ TEST(VectorTest, FeatureTypeExists) {
   SUCCEED();
 }
 
-}  // namespace
-}  // namespace hsys
+/* AI generated code: end */
