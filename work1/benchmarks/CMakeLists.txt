@@ -11,7 +11,7 @@ file(GLOB_RECURSE SRC
 
 add_executable(work1_benchmarks ${SRC})
 
-set_target_minimum_cuda_arch(work1_core 75)
+set_target_minimum_cuda_arch(work1_benchmarks 75)
 
 target_compile_features(work1_benchmarks PRIVATE
     cuda_std_20
