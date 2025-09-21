@@ -17,7 +17,7 @@ struct VectorAccessor {
   std::size_t size_;
 
  public:
-  VectorAccessor(atom_t* data, std::size_t size)
+  __host__ __device__ VectorAccessor(atom_t* data, std::size_t size)
       : data_(data)
       , size_(size) {}
 

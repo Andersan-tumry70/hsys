@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.31)
 project(work1_tests LANGUAGES CUDA)
 
+include(../../cmake/configs/cuda_arch.cmake)
 include(../../cmake/deps/gtest.cmake)
 include(../../cmake/deps/eigen.cmake)
 
@@ -9,6 +10,8 @@ file(GLOB_RECURSE SRC
 )
 
 add_executable(work1_tests ${SRC})
+
+set_target_minimum_cuda_arch(work1_core 75)
 
 target_compile_features(work1_tests PRIVATE
     cuda_std_20

@@ -7,19 +7,13 @@ set(CMAKE_CUDA_USE_RESPONSE_FILE_FOR_INCLUDES OFF)
 set(CMAKE_CUDA_USE_RESPONSE_FILE_FOR_LIBRARIES OFF)
 set(CMAKE_CUDA_USE_RESPONSE_FILE_FOR_OBJECTS OFF)
 
-add_library(work1_core INTERFACE ${SRC})
+add_library(work1_core INTERFACE)
 add_library(work1::core ALIAS work1_core)
-
-set_target_properties(work1_core PROPERTIES
-    CUDA_RUNTIME_LIBRARY Shared
-    CUDA_SEPARABLE_COMPILATION ON
-)
 
 set_target_minimum_cuda_arch(work1_core 75)
 
 target_compile_features(work1_core INTERFACE
     cuda_std_20
-    cxx_std_20
 )
 
 target_compile_options(work1_core INTERFACE
