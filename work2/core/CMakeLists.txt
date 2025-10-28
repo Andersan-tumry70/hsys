@@ -28,5 +28,5 @@ target_include_directories(work2_core INTERFACE
 )
 
 target_link_libraries(work2_core INTERFACE
-    work1::cudagh
+    work2::cudagh
 )
