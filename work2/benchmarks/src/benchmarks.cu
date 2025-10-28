@@ -1,40 +1,40 @@
 #include <cudagh.hpp>
+//#include <../../Core/
+//#include <work2/kernels/kernel_vector_add.cuh>
 #include <work2/kernels/kernel_vector_add.cuh>
-#include <work2/vector.cuh>
+#include <work2/matrix.cuh>
 
 #define EIGEN_NO_CUDA
-
 #include <Eigen/Dense>
 #include <benchmark/benchmark.h>
 #include <cuda_timer.hpp>
 
-static void BM_EigenVectorAddCPU(benchmark::State& state) {
+static void BM_EigenMatrixMulCPU(benchmark::State& state) {
   auto len = state.range(0);
 
-  Eigen::VectorXf a = Eigen::VectorXf(len);
-  Eigen::VectorXf b = Eigen::VectorXf(len);
-  Eigen::VectorXf result(len);
+  Eigen::MatrixXf A = Eigen::MatrixXf::Random(N, N);
+  Eigen::MatrixXf B = Eigen::MatrixXf::Random(N, N);
+  Eigen::MatrixXf C(N, N);
 
   for (auto _ : state) {
-    result = a + b;  // lazy RHS
-    benchmark::DoNotOptimize(result.data());
+    c = a * b; 
+    benchmark::DoNotOptimize(c.data());
     benchmark::ClobberMemory();
   }
 }
 
-static void BM_OurVectorAddGPU(benchmark::State& state) {
-  auto size = state.range(0);
+static void BM_OurMatrixMulGPU(benchmark::State& state) {
+  auto N = state.range(0);
 
-  auto a = hsys::Vector<float>(size);
-  auto b = hsys::Vector<float>(size);
-  auto c = hsys::Vector<float>(size);
+  auto a = hsys::Matrix<float>(N, N);
+  auto b = hsys::Matrix<float>(N, N);
+  auto c = hsys::Matrix<float>(N, N);
 
   for (auto _ : state) {
     float elapsed_time = 0;
-
     {
       CUDATimer timer(elapsed_time);
-      hsys::kernel_vector_add<<<cudagh::cover(size, 128), 128>>>(
+      hsys::kernel_matrix_mul<<<cudagh::cover(size, 128), 128>>>( //TODO: Подумать, стоит ли убирать, <<<...>>>
           c.accessor(), a.accessor(), b.accessor());
     }
 

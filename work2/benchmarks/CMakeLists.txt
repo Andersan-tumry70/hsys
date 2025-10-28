@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31)
-project(work1_benchmarks LANGUAGES CUDA)
+project(work2_benchmarks LANGUAGES CUDA)
 
 include(../../cmake/configs/cuda_arch.cmake)
 include(../../cmake/deps/gbench.cmake)
@@ -9,21 +9,21 @@ file(GLOB_RECURSE SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cu
 )
 
-add_executable(work1_benchmarks ${SRC})
+add_executable(work2_benchmarks ${SRC})
 
-set_target_minimum_cuda_arch(work1_benchmarks 75)
+set_target_minimum_cuda_arch(work2_benchmarks 75)
 
-target_compile_features(work1_benchmarks PRIVATE
+target_compile_features(work2_benchmarks PRIVATE
     cuda_std_20
 )
 
-target_compile_options(work1_benchmarks PRIVATE
+target_compile_options(work2_benchmarks PRIVATE
     -Wall -O3
 )
 
-target_link_libraries(work1_benchmarks PRIVATE
+target_link_libraries(work2_benchmarks PRIVATE
     benchmark::benchmark
     Eigen3::Eigen
-    work1::core
-    work1::cuda_timer
+    work2::core
+    work2::cuda_timer
 )
