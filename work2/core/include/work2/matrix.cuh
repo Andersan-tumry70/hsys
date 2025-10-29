@@ -3,6 +3,7 @@
 
 #include "data.cuh"
 #include "matrix_view.cuh"
+#include <memory>
 
 namespace hsys {
 

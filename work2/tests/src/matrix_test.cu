@@ -1,8 +1,7 @@
 #include <work2/matrix.cuh>
+#include <work2/kinds.cuh>  // ← обязательно для AtomKind
 
 #include <gtest/gtest.h>
-
-/* AI generated code: begin */
 
 using namespace hsys;
 
@@ -36,47 +35,21 @@ TEST(MatrixTest, ZeroSizeConstructors) {
   EXPECT_EQ(mat70.size(), 0);
 }
 
-TEST(MatrixTest, BlockAccess) {
-  const std::size_t nrows = 6;
-  const std::size_t ncols = 8;
-  Matrix<int> mat(nrows, ncols);
-
-  auto block = mat.block();
-  EXPECT_EQ(block.size(), nrows * ncols);
-
-  const auto& const_mat = mat;
-  auto const_block = const_mat.block();
-  EXPECT_EQ(const_block.size(), nrows * ncols);
-}
-
-TEST(MatrixTest, AccessorAccess) {
+TEST(MatrixTest, ViewAccess) {
   const std::size_t nrows = 5;
   const std::size_t ncols = 9;
   Matrix<float> mat(nrows, ncols);
 
-  auto accessor = mat.accessor();
-  EXPECT_EQ(accessor.nrows(), nrows);
-  EXPECT_EQ(accessor.ncols(), ncols);
-  EXPECT_EQ(accessor.size(), nrows * ncols);
+  auto view = mat.view();
+  EXPECT_EQ(view.nrows(), nrows);
+  EXPECT_EQ(view.ncols(), ncols);
+  EXPECT_EQ(view.size(), nrows * ncols);
 
   const auto& const_mat = mat;
-  auto const_accessor = const_mat.accessor();
-  EXPECT_EQ(const_accessor.nrows(), nrows);
-  EXPECT_EQ(const_accessor.ncols(), ncols);
-  EXPECT_EQ(const_accessor.size(), nrows * ncols);
-}
-
-TEST(MatrixTest, AccessorDataConsistency) {
-  const std::size_t nrows = 4;
-  const std::size_t ncols = 7;
-  Matrix<double> mat(nrows, ncols);
-
-  auto accessor = mat.accessor();
-  auto block = mat.block();
-
-  EXPECT_EQ(accessor.size(), block.size());
-  EXPECT_EQ(accessor.nrows(), nrows);
-  EXPECT_EQ(accessor.ncols(), ncols);
+  auto const_view = const_mat.view();
+  EXPECT_EQ(const_view.nrows(), nrows);
+  EXPECT_EQ(const_view.ncols(), ncols);
+  EXPECT_EQ(const_view.size(), nrows * ncols);
 }
 
 TEST(MatrixTest, DifferentAtomTypes) {
@@ -105,8 +78,7 @@ TEST(MatrixTest, ConstCorrectness) {
   [[maybe_unused]] auto size = const_mat.size();
   [[maybe_unused]] auto nrows_val = const_mat.nrows();
   [[maybe_unused]] auto ncols_val = const_mat.ncols();
-  [[maybe_unused]] auto block = const_mat.block();
-  [[maybe_unused]] auto accessor = const_mat.accessor();
+  [[maybe_unused]] auto view = const_mat.view();
 
   EXPECT_EQ(size, nrows * ncols);
   EXPECT_EQ(nrows_val, nrows);
@@ -150,9 +122,14 @@ INSTANTIATE_TEST_SUITE_P(
     )
 );
 
+// TEST(MatrixTest, FeatureTypeExists) {
+//   Matrix<float> mat(1, 1);
+//   using ViewType = std::remove_reference_t<decltype(mat.view())>;
+//   [[maybe_unused]] typename ViewType::hsys_matrix_view_feature feature;
+//   SUCCEED();
+// }
+
 TEST(MatrixTest, FeatureTypeExists) {
-  [[maybe_unused]] Matrix<float>::hsys_matrix_accessor_feature feature;
+  [[maybe_unused]] hsys::MatrixView<float>::hsys_matrix_view_feature feature;
   SUCCEED();
 }
-
-/* AI generated code: end */

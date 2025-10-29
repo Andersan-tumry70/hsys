@@ -13,26 +13,32 @@ using RowMatrixXf = Eigen::Matrix<float, Eigen::Dynamic, Eigen::Dynamic, Eigen::
 class MatrixMulTest : public ::testing::TestWithParam<std::pair<std::size_t, float>> {
  protected:
   bool mmul_test_impl(std::size_t N, float tol) {
-    RowMatrixXf A_target = RowMatrixXf::Random(N, N);
-    RowMatrixXf B_target = RowMatrixXf::Random(N, N);
-    RowMatrixXf C_target = A_target * B_target;
+    // --- CPU reference ---
+    RowMatrixXf A_host = RowMatrixXf::Random(N, N);
+    RowMatrixXf B_host = RowMatrixXf::Random(N, N);
+    RowMatrixXf C_host = A_host * B_host;
 
-    auto a = hsys::Matrix<float>(N, N);
-    a.block().copy_from_host(a_target.data());
+    // --- GPU matrices ---
+    hsys::Matrix<float> A(N, N);
+    hsys::Matrix<float> B(N, N);
 
-    auto b = hsys::Matrix<float>(N, N);
-    b.block().copy_from_host(b_target.data());
+    // --- Copy host → device ---
+    cudaMemcpy(A.data().data(), A_host.data(), N * N * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemcpy(B.data().data(), B_host.data(), N * N * sizeof(float), cudaMemcpyHostToDevice);
 
-    auto c = a * b;
+    // --- Multiply on GPU ---
+    auto C = A * B;
 
     if (C.nrows() != N || C.ncols() != N) {
       return false;
     }
 
-    RowMatrixXf C_from_device(N, N);
-    C.block().copy_to_host(C_from_device.data());
+    // --- Copy result back ---
+    RowMatrixXf C_device(N, N);
+    cudaMemcpy(C_device.data(), C.data().data(), N * N * sizeof(float), cudaMemcpyDeviceToHost);
 
-    return c_target.isApprox(c_from_device, tol);
+    // --- Compare ---
+    return C_host.isApprox(C_device, tol);
   }
 };
 

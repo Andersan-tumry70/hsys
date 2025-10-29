@@ -1,5 +1,6 @@
-//#include <cudagh.hpp>
-#include <utils/cudagh/include/cudagh.hpp>
+#include <cudagh.hpp>
+//#include <utils/cudagh/include/cudagh.hpp>
+//#include <work2/utils/cudagh/include/cudagh.hpp>
 #include <work2/kernels/kernel_matmul_naive.cuh>
 #include <work2/matrix.cuh>
 #include <work2/matrix_operators.cuh>
@@ -8,6 +9,7 @@
 #include <Eigen/Dense>
 #include <benchmark/benchmark.h>
 #include <cuda_timer.hpp>
+//#include <work2/utils/cuda_timer/include/cuda_timer.hpp>
 
 static void BM_EigenMatrixMulCPU(benchmark::State& state) {
   auto N = state.range(0);
