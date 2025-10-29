@@ -4,7 +4,6 @@
 #include "kinds.cuh"
 
 // TODO: check CUDA errors
-
 namespace hsys {
 
 template <AtomKind AtomT>
